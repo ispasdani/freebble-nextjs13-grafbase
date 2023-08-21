@@ -49,28 +49,36 @@ const Home = async ({ searchParams: { category, endCursor } }: Props) => {
 
   return (
     <section className="flex-start flex-col paddings mb-16">
-      <Categories />
+      {projectsToDisplay?.length > 0 ? (
+        <>
+          <Categories />
 
-      <section className="projects-grid">
-        {projectsToDisplay.map(({ node }: { node: ProjectInterface }) => (
-          <ProjectCard
-            key={node?.id}
-            id={node?.id}
-            image={node?.image}
-            title={node?.title}
-            name={node?.createdBy?.name}
-            avatarUrl={node?.createdBy?.avatarUrl}
-            userId={node?.createdBy?.id}
+          <section className="projects-grid">
+            {projectsToDisplay.map(({ node }: { node: ProjectInterface }) => (
+              <ProjectCard
+                key={node?.id}
+                id={node?.id}
+                image={node?.image}
+                title={node?.title}
+                name={node?.createdBy?.name}
+                avatarUrl={node?.createdBy?.avatarUrl}
+                userId={node?.createdBy?.id}
+              />
+            ))}
+          </section>
+
+          <LoadMore
+            startCursor={pagination.startCursor}
+            endCursor={pagination.endCursor}
+            hasPreviousPage={pagination.hasPreviousPage}
+            hasNextPage={pagination.hasNextPage}
           />
-        ))}
-      </section>
-
-      <LoadMore
-        startCursor={pagination.startCursor}
-        endCursor={pagination.endCursor}
-        hasPreviousPage={pagination.hasPreviousPage}
-        hasNextPage={pagination.hasNextPage}
-      />
+        </>
+      ) : (
+        <p className="no-result-text text-center">
+          No projects to display for now
+        </p>
+      )}
     </section>
   );
 };
